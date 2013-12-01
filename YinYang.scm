@@ -1,0 +1,5 @@
+(let* ((yin ((lambda (foo) (newline) foo)
+             (call/cc (lambda (bar) bar))))
+       (yang ((lambda (foo) (begin (sleep 1) (write-char #\*) (flush-output)) foo)
+              (call/cc (lambda (bar) bar)))))
+  (yin yang))
