@@ -31,15 +31,9 @@
             (encode (cdr message) tree))))
 ; encode symbol by tree
 (define (encode-symbol unit tree)
-  ; check symbol is in symbol-lst
-  ; this should replace by system internal function
-  (define (in-list? unit lst)
-    (cond ((null? lst) #f)
-          ((equal? unit (car lst)) #t)
-          (else (in-list? unit (cdr lst)))))
   ; check symbol is in tree
   (define (in? unit tree)
-    (in-list? unit (symbols tree)))
+    (member unit (symbols tree)))
   (cond ((leaf? tree) '())
         ((in? unit (left-branch tree)) (cons 0 (encode-symbol unit (left-branch tree))))
         ((in? unit (right-branch tree)) (cons 1 (encode-symbol unit (right-branch tree))))
