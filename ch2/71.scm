@@ -1,0 +1,13 @@
+; 0             2^(n-1)
+; 10            2^(n-2)
+; 110           ...
+; 1110          ...
+; 11110         ...
+; ...           ...
+; 111111110     2=2^(2-1)
+; 111111111     1=2^(1-1)
+
+; so most frequet symbol using one bit 0
+; least frequet symbol using (n-1) bit
+; !! not n bit.
+; because last two symbol has the same length

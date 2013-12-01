@@ -8,13 +8,13 @@ Creating this repo is to promote myself to insiting on reading and study this bi
 FAQ
 ===
 
-## What is displayln?
+### What is displayln?
 
 In racket, this is a internal function.But for some else intepreter, maybe not exist this func.
 
 So simply (define (displayln x) (display x) (newline)).
 
-## Why you display the answer, it seem not useful?
+### Why you display the answer, it seem not useful?
 
 eh..
 

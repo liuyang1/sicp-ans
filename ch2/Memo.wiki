@@ -1,0 +1,20 @@
+CONS::
+| two item    | build a dot pair.               |
+| item + list | add one item to heaf of a list  |
+| list + item | !! build a list + item dot pair |
+
+| (cons 1 2)     | (1 . 2)     |
+| (cons 1 '(2 3) | (1 2 3)     |
+| (cons '(2 3) 1 | ((2 3) . 1) |
+
+APPEND::
+| item + any  | !! ERROR                                  |
+| list + item | !! one list but last item is ITEM not NIL |
+| list + list | append two lists to one list              |
+
+| (append 1 2)        | ERROR     |
+| (append '(1 2) 3)   | (1 2 . 3) |
+| (append '(1 2) '(3) | (1 2 3)   |
+
+LIST::
+build a list with any item.
