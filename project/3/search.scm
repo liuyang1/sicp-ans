@@ -1,3 +1,4 @@
+(define (displayln a) (display a) (newline))
 ;;; SEARCH.SCM
 ;;; MIT 6.001                               Spring, 2005
 ;;; PROJECT 3
@@ -44,6 +45,7 @@
   (if (not (graph-element? element))
       (error "object not element: " element)
       (first (cdr element))))
+(define first car)
 
 ; Get the children (a list of outgoing node names)
 ; from the Graph-Element
@@ -51,12 +53,14 @@
   (if (not (graph-element? element))
       (error "object not element: " element)
       (second (cdr element))))
+(define second cadr)
 
 ; Get the contents from the Graph-Element
 (define (graph-element->contents element)   ; Graph-Element -> Contents
   (if (not (graph-element? element))
       (error "object not element: " element)
       (third (cdr element))))
+(define third caddr)
 
 ;;---------------
 ;; Graph
@@ -196,7 +200,7 @@
 ;; a key with a list of values for that key, i.e.
 ;;   Index = Pair<Index-Tag, list<Index-Entry>>
 ;;   Index-Entry = list<Key, list<Val>>
-;; 
+;;
 
 ; index class (index
 (define (make-index)            ; void -> Index
@@ -225,21 +229,18 @@
 (define (find-in-index index key)       ; Index,Key -> list<Val>
   (let ((index-entry (find-entry-in-index index key)))
     (if (not (null? index-entry))
-        (cadr index-entry)
+        (cadr index-entry); if here is cdr, index struct would be more simple.
         '())))
 
-;; TO BE IMPLEMENTED
 ; add-to-index! is method of INDEX
 (define (add-to-index! index key value) ; Index,Key,Val -> Index
   (let ((index-entry (find-entry-in-index index key)))
     (if (null? index-entry)
-      (set-cdr! index (list (cdr index) (list key (list value))))
       ;; no entry -- create and insert a new one...
-	;... TO BE IMPLEMENTED
-
-    (set-cdr! index (set-cdr! index-entry (cons (cdr index-entry) value)))
-      ;; entry exists -- insert value if not already there...
-	;... TO BE IMPLEMENTED
+      ; (cons key (list (list value))) -> (key (value))
+      (set-cdr! index (cons (cons key (list (list value))) (cdr index)))
+    ;; entry exists -- insert value if not already there...
+    (set-cdr! index-entry (list (cons value (cadr index-entry))))
 	))
   index)
 
@@ -247,12 +248,12 @@
 (define test-index (make-index))
 (add-to-index! test-index 'key1 'value1)
 (add-to-index! test-index 'key2 'value2)
-(display test-index)
-(newline)
+(displayln test-index)
 (add-to-index! test-index 'key1 'another-value1)
+(displayln test-index)
 
-(find-in-index test-index 'key1)
-(find-in-index test-index 'key2)
+(displayln (find-in-index test-index 'key1))
+(displayln (find-in-index test-index 'key2))
 
 
 ;;------------------------------------------------------------
