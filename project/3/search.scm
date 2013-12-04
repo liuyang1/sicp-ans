@@ -180,9 +180,21 @@
 ;             (lambda (node) (eq? node 'l))
 ;             test-graph)
   
-
+  
 ;; you will need to write a similar search procedure that handles cycles
+; only swap the postion of 'new and 'old, keeping all number of char unchanged.
+; becaue breadth-first-search should check old (sibling node) first.
+; so append new node (child node) to old
+(define (BFS-simple start goal? graph)
+  (search start
+	  goal?
+	  find-node-children
+	  (lambda (new old) (append old new))
+	  graph))
 
+; (BFS-simple 'a
+;             (lambda (node) (eq? node 'l))
+;             test-graph)
 
 ;;;------------------------------------------------------------
 ;;; Index Abstraction
@@ -302,6 +314,17 @@
 ;;      http://sicp.csail.mit.edu/SchemeImplementations/)
 ;;    '(... words extracted from http://sicp.csail.mit.edu/getting-help.html))
 ;;   ...))
+
+;;-----------------------------------------------------------------------------
+;; Warmup Exercise 2:
+;; Why DFS-simple proc not suit to the web define as above?
+;; Because there are circles.
+;; / -> SchemeImplementations -> getting-help.html -> /
+;; SchemeImplementations <-> getting-help.html
+;; Merge Method ->	  (lambda (new old) (append new old))
+;;          would be infinite and never stop.
+;; should modify to check if not exists in old, then append it.
+;;-----------------------------------------------------------------------------
 
 
 ;;--------------------
