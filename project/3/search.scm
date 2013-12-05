@@ -432,7 +432,25 @@
 ;; (displayln (find-in-index the-web-index '*magic*))
 ;; ;Value: #f
 
+;; Exercise 4 just pass
+;; Exercise 5
+(define (make-web-index-inner web start)
+  (let ((index (make-index)))
+   (begin (BFS start
+               ; this is a hack
+               ; goal? function internal add-document-to-index!
+               (lambda (node) (add-document-to-index! index web node) 
+                 #f) 
+               web)
+          index)))
 
+(define (make-web-index web start)
+  (let ((index (make-web-index-inner web start)))
+   (lambda (key) (find-in-index index key))))
+
+(define find-documents (make-web-index the-web 'http://sicp.csail.mit.edu/))
+
+(displayln (find-documents 'COLLABORATIVE))
 ;;------------------------------------------------------------
 ;; utility for timing procedure calls.
 ;; returns the time in seconds
