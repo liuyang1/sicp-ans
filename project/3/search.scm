@@ -1,4 +1,5 @@
 (define (displayln a) (display a) (newline))
+(define write-line displayln)
 ;;; SEARCH.SCM
 ;;; MIT 6.001                               Spring, 2005
 ;;; PROJECT 3
@@ -182,6 +183,7 @@
   
   
 ;; you will need to write a similar search procedure that handles cycles
+; Exercise 1
 ; only swap the postion of 'new and 'old, keeping all number of char unchanged.
 ; becaue breadth-first-search should check old (sibling node) first.
 ; so append new node (child node) to old
@@ -333,7 +335,66 @@
 ;; you need to write expressions to search the web using different search
 ;; strategies
 
+; Exercise 2 Marking the visited node
+; add PASSED as inner loop state
+(define (search-with-cycles init-state goal? successors merge graph)
+  (define (search-inner still-to-do passed)
+    (if (null? still-to-do) #f
+      (let ((current (car still-to-do)))
+       (if *search-debug*
+         (write-line (list 'now-at current)))
+       (if (goal? current)
+         #t
+         (search-inner
+           ; filter
+           ; only node not passed and not insert to todo-list
+           ; add to queue.
+           (merge (filter (lambda (x) (and (not (member x passed))
+                                           (not (member x still-to-do))))
+                          (successors graph current))
+                  (cdr still-to-do))
+           ; add current to passed state
+           (cons current passed))))))
+  (search-inner (list init-state) '()))
 
+(define (DFS start goal? graph)
+  (search-with-cycles start
+                      goal?
+                      find-node-children
+                      (lambda (new old) (append new old))
+                      graph))
+
+(define (BFS start goal? graph)
+  (search-with-cycles start
+                      goal?
+                      find-node-children
+                      (lambda (new old) (append old new))
+                      graph))
+;;; -------------- TEST CODE -------------------------------------
+;(DFS 'a
+;     (lambda (node) (eq? node 'l))
+;     the-web)
+;
+;(BFS 'a
+;     (lambda (node) (eq? node 'l))
+;     test-cycle)
+;
+;(map (lambda (ele)
+;       (displayln (cadr ele))
+;       (displayln (caddr ele))
+;       (newline)) 
+;     (cdr the-web))
+;(newline)
+;
+;(DFS 'http://sicp.csail.mit.edu/
+;     (lambda (node) #f)
+;     the-web)
+;
+;(newline)
+;(BFS 'http://sicp.csail.mit.edu/
+;     (lambda (node) #f)
+;     the-web)
+;;;---------------------------------------------------------------
 ;;--------------------
 ;; Indexing the Web
 ;;
