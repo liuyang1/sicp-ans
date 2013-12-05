@@ -259,18 +259,18 @@
   index)
 
 ;; Testing
-(define test-index (make-index))
-(add-to-index! test-index 'key1 'value1)
-(add-to-index! test-index 'key2 'value2)
-(displayln test-index)
-(add-to-index! test-index 'key1 'another-value1)
-(displayln test-index)
+; (define test-index (make-index))
+; (add-to-index! test-index 'key1 'value1)
+; (add-to-index! test-index 'key2 'value2)
+; (displayln test-index)
+; (add-to-index! test-index 'key1 'another-value1)
+; (displayln test-index)
+; 
+; (displayln (find-in-index test-index 'key1))
+; (displayln (find-in-index test-index 'key2))
 
-(displayln (find-in-index test-index 'key1))
-(displayln (find-in-index test-index 'key2))
 
-
-;;------------------------------------------------------------
+;------------------------------------------------------------
 ;; Finally, the Web!
 
 ;;--------------------
@@ -293,7 +293,6 @@
 
 (define (find-URL-text web url)
   (find-node-contents web url))
-
 
 ;; The real definition of THE-WEB we'll use is in another file, 
 ;; including all of the words in the documents.
@@ -410,12 +409,13 @@
 ;; web, and then key each of the words in the
 ;; text into the index.
 
-;; TO BE IMPLEMENTED
 ;; add-document-to-index!: Index, Web, URL
 ;; (define (add-document-to-index! index web url)
 ;; ...
 ;; )
-
+(define (add-document-to-index! index web url)
+  (map (lambda (x) (add-to-index! index x url))
+       (find-URL-text web url)))
 
 ;; Example use
 ;; 
@@ -424,11 +424,12 @@
 ;; (add-document-to-index! the-web-index
 ;;                         the-web 
 ;;                         'http://sicp.csail.mit.edu/)
-;; 
-;; (find-in-index 'help)
+;; (displayln the-web-index)
+;;  
+;; (displayln (find-in-index the-web-index 'HELP))
 ;; ;Value: (http://sicp.csail.mit.edu/)
-;; 
-;; (find-in-index '*magic*)
+;;
+;; (displayln (find-in-index the-web-index '*magic*))
 ;; ;Value: #f
 
 
