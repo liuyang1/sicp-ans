@@ -13,7 +13,9 @@
 ; !!!
 ; this should define as MACRO, not a proc
 ; so not to APPLY it.
-(define (stream-cons a b) (cons a (delay b)))
+(define-syntax stream-cons
+  (syntax-rules () ((stream-cons a b) 
+                    (cons a (delay b)))))
 (define (stream-car stream) (car stream))
 ; FORCE
 ; get a form which car is DELAY, then apply the form
@@ -21,14 +23,14 @@
 
 (define (stream-enum low high)
   (if (> low high) empty-stream
-    (cons low (delay (stream-enum (+ low 1) high)))))
+    (stream-cons low (stream-enum (+ low 1) high))))
 
 (define (stream-filter pred stream)
   (cond ((stream-null? stream) empty-stream)
         ((pred (stream-car stream))
-         (cons (stream-car stream)
-                      (delay (stream-filter pred
-                                     (stream-cdr stream)))))
+         (stream-cons (stream-car stream)
+                      (stream-filter pred
+                                     (stream-cdr stream))))
         (else
           (stream-filter pred (stream-cdr stream)))))
 
