@@ -1,6 +1,13 @@
+def fib1(n):
+    if n == 0 or n == 1:
+        return 1
+    return fib1(n - 1) + fib(n - 2)
+
+
 # python yield style
 # fib stream
-
+# this algo complexity is O(phi^n) exponential level
+# same as
 def fib():
     yield 0
     yield 1
