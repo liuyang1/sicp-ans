@@ -14,6 +14,9 @@
   (stream-map + s1 s2))
 
 ; fib(n) = fib(n-1) + fib(n-2)
+; but this complexity is O(1)
+; because this hold status at *fib*, and only create one sequence.
+; and not need to re-calc it when ref to prior data
 (define *fibs*
   (stream-cons 0
                (stream-cons 1
@@ -25,4 +28,12 @@
   (if (= n 0)
     (stream-car s)
     (stream-ref (stream-cdr s) (- n 1))))
-(display (stream-ref *fibs* 10))
+
+(define (loop start end)
+  (if (> start end) '()
+    (begin (display (stream-ref *fibs* start))
+           (newline)
+           (loop (+ start 1) end))))
+
+(stream-ref *fibs* 10)
+(display *fibs*)
