@@ -21,24 +21,35 @@
         (else (begin (shuffle (cdr lst))
                      (swap-two lst 0 (random (length lst)))))))
 
-; 生成冲突序列
+; 新的冲突序列生成方法
 ; (5 4 0 2 3 1)
-; ((3 . 4) (1 . 3) (0 . 3) (0 . 1))
-; 注意到0,1,3这个形成一个环,也就是任意选择其中的两个,都会冲突.如果交换其中的任意两个.可以减少冲突,但是不能够彻底减少冲突为0.
-; 而如果直接交换一个冲突对的两个位置,则可能无法减少冲突.
-(define (conflict-seq lst)
-  (define (confict-one idx head idx2 tail ret)
-    (cond ((null? tail) ret)
-          ((= (- idx2 idx) (abs (- head (car tail))))
-           (confict-one idx head (+ idx2 1) (cdr tail)
-                        (cons (cons idx idx2) ret)))
-          (else
-            (confict-one idx head (+ idx2 1) (cdr tail) ret))))
-  (define (helper idx head tail ret)
-    (if (null? tail) ret
-      (helper (+ 1 idx) (car tail) (cdr tail)
-              (append (confict-one idx head (+ idx 1) tail '()) ret))))
-  (helper 0 (car lst) (cdr lst) '()))
+; ((3 4) (0 1 3))
+; 明显这样是一个更为合理的结果.
+; 这种方法可以直接检查序列与其索引的和/差,然后将重复的提取出来.
+; 和: (5 5 2 5 7 6) -> (0 1 3)
+; 差: (5 3 -2 -1 -1 -4) -> (3 4)
+
+; 构成和/差序列,主要利用index过程,对其进行索引化
+(define (conflict-gourp lst)
+  (define (index lst)
+     (map cons (range 0 (length lst)) lst))
+  (let ((idx (range 0 (length lst))))
+  (append (group-index (index (map + lst idx)))
+          (group-index (index (map - lst idx))))))
+
+; 对索引化后的序列,进行检查.
+; 将具有相同的和/差值的索引聚合起来
+(define (group-index lst)
+  (define (helper head tail ret)
+    (let ((same-index (filter (lambda (v) (= (cdr v) (cdr head))) tail)) 
+          (diff-index (filter (lambda (v) (not (= (cdr v) (cdr head)))) tail)))
+      (let ((newret (append ret (list (cons (car head) (map car same-index))))))
+       ; 若剩余的序列长度小于等于1,则退出.
+       ; 退出,则筛选序列组长度大于1(也就是该组成员不只1个)的
+       (if (<= (length diff-index) 1)
+         (filter (lambda (x) (> (length x) 1)) newret)
+         (helper (car diff-index) (cdr diff-index) newret)))))
+  (helper (car lst) (cdr lst) '()))
 
 ; 暴力随机生成一个N皇后的可行解.
 ; TODO:
@@ -47,10 +58,10 @@
   (loop (range 0 n)))
 (define (loop lst)
   (begin (shuffle lst)
-         (let ((conf (conflict-seq lst)))
+         (let ((conf (conflict-gourp lst)))
           (if (not (= 0 (length conf)))
             (loop lst)
             lst))
          ))
-(display  (rand-q 15))
+(display  (rand-q 8))
 (newline)
