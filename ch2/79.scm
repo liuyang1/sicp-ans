@@ -1,0 +1,20 @@
+(load "oriData.scm")
+(define (equal-number? n0 n1)
+  (eq? n0 n1))
+(define (equal-rat? n0 n1)
+  (define (num n) (car n))
+  (define (den n) (cdr n))
+  (eq? (* (num n0) (den n1)) (* (den n0) (num n1))))
+(define (equal-complex? n0 n1)
+  (define real-part car)
+  (define imag-part cdr)
+  (and (eq? (real-part n0) (real-part n1)) (eq? (imag-part n0) (imag-part n1))))
+
+(put 'equ? 'scheme-number equal-number?)
+(put 'equ? 'rational equal-rat?)
+(put 'equ? 'complex equal-complex?)
+
+; test code
+(displayln ((get 'equ? 'scheme-number) 1 1))
+(displayln ((get 'equ? 'rational) '(2 . 1) '(6 . 3)))
+(displayln ((get 'equ? 'complex) '(2 . 1) '(2 . 1)))
