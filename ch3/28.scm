@@ -1,6 +1,6 @@
 (load "wire.scm")
 (define (or-gate a1 a2 output)
-  (define or-gate-delay 0)
+  (define or-gate-delay 1)
   (define (or-action)
     (let ((new-val (logical-or (get-signal a1) (get-signal a2))))
      (after-delay or-gate-delay
