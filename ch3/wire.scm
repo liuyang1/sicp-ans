@@ -1,8 +1,9 @@
+(use-modules (srfi srfi-18))
 (define (displayln x) (display x) (newline) x)
 
 (define (make-wire)
-  (define default-in 'nothing)
-  (define default-out 'nothing)
+  (define default-in 0)
+  (define default-out 0)
   (define action (lambda () 'default-action))
   (list default-in default-out action))
 
@@ -33,7 +34,10 @@
   (cond ((= s 0) 1)
         ((= s 1) 0)
         (else (error "invalid signal" s))))
-
+(define (logical-or s0 s1)
+  (cond ((and (= s0 0) (= s1 0)) 0)
+        ((or (= s0 1) (= s1 1)) 1)
+        (else (error "invalid signal" s0 s1))))
 
 ; test code
 ; (define a (make-wire))
