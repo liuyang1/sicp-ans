@@ -3,20 +3,22 @@
 
 (define (make-wire)
   (define val 0)
-  (define action (lambda () 'default-action))
-  (cons val action))
+  (define actionlst '()) ; default action list is null
+  (cons val actionlst))
 
 (define (get-signal wire)
   (car wire))
+(define (get-actionlist wire)
+  (cdr wire))
 (define (set-signal! wire v)
   (set-car! wire v)
-  ((cdr wire))
+  (for-each (lambda (x) (x)) (get-actionlist wire))
   )
 (define (add-action! wire no-arg-proc)
-  (set-cdr! wire no-arg-proc))
+  (set-cdr! wire (cons no-arg-proc (get-actionlist wire))))
 
 (define (inverter input output)
-  (define inverter-delay 1)
+  (define inverter-delay 0)
   (define (invert-input)
     (let ((new-val (logical-not (get-signal input))))
      (after-delay inverter-delay
@@ -25,6 +27,8 @@
   (add-action! input invert-input)
   'ok)
 
+; TODO:
+; how to simulate time-sequence???
 (define (after-delay dt proc)
   (sleep dt)
   (proc))
@@ -52,6 +56,33 @@
   (add-action! a1 and-action)
   (add-action! a2 and-action)
   'ok)
+
+(define (or-gate a1 a2 output)
+  (define or-gate-delay 0)
+  (define (or-action)
+    (let ((new-val (logical-or (get-signal a1) (get-signal a2))))
+     (after-delay or-gate-delay
+                  (lambda ()
+                    (set-signal! output new-val)))))
+  (add-action! a1 or-action)
+  (add-action! a2 or-action)
+  'ok)
+
+(define (half-adder a b s c)
+  (let ((d (make-wire)) (e (make-wire)))
+   (and-gate a b c)
+   (or-gate a b d)
+   (inverter c e)
+   (and-gate d e s)
+   'ok))
+
+(define (full-adder a b c-in sum c-out)
+  (let ((s (make-wire)) (c1 (make-wire)) (c2 (make-wire)))
+   (half-adder b c-in s c1)
+   (half-adder a s sum c2)
+   (or-gate c1 c2 c-out)
+   'ok))
+
 ; test code
 ; (define a (make-wire))
 ; (define b (make-wire))
