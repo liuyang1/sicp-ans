@@ -83,36 +83,33 @@
    (or-gate c1 c2 c-out)
    'ok))
 
-; test code
-; (define a (make-wire))
-; (define b (make-wire))
-; (inverter a b)
-; 
-; (set-signal! a 1)
-; (displayln (get-signal b))
-; 
-; (set-signal! a 0)
-; (displayln (get-signal b))
+(define (make-agenda)
+  (let ((agenda '()))
+   (define (empty?) (null? agenda))
+   (define (first) (car agenda))
+   (define (pop) (set! agenda (cdr agenda)))
+   (define (add! time action)
+     (set! agenda (sort (cons (cons time action) agenda) ; stable sort
+                        (lambda (x y)
+                          (< (car x) (car y))))))
+   (define (disp) (displayln agenda))
+   (define (dispatch m)
+     (cond ((eq? m 'empty?) empty?)
+           ((eq? m 'first) first)
+           ((eq? m 'pop) pop)
+           ((eq? m 'add!) add!) 
+           ((eq? m 'display) disp)
+           (else 'todo)))
+   dispatch))
 
-; test AND-gate
-;(define a (make-wire))
-;(define b (make-wire))
-;(define c (make-wire))
-;
-;(and-gate a b c)
-;
-;(set-signal! a 0)
-;(set-signal! b 0)
-;(displayln (get-signal c))
-;
-;(set-signal! a 1)
-;(set-signal! b 0)
-;(displayln (get-signal c))
-;
-;(set-signal! a 0)
-;(set-signal! b 1)
-;(displayln (get-signal c))
-;
-;(set-signal! a 1)
-;(set-signal! b 1)
-;(displayln (get-signal c))
+(define (empty-agenda? agenda) ((agenda 'empty?)))
+(define (first-agenda-item agenda) (cdr ((agenda 'first))))
+(define (remove-first-agenda agenda) ((agenda 'pop)))
+(define (add-to-agenda! time action agenda) ((agenda 'add!) time action))
+
+(define (propagate)
+  (if (empty-agenda? *agenda*) 'done
+    (let ((first-item (first-agenda-item *agenda*)))
+     (first-item)
+     (remove-first-agenda *agenda*)
+     (propagate))))
