@@ -1,4 +1,5 @@
 (define (displayln x) (display x) (newline) x)
+(define (call-each lst) (for-each (lambda (x) (x)) lst))
 
 ;;; wire base
 (define (make-wire)
@@ -13,7 +14,7 @@
 (define (set-signal! wire v)
   (if (not (= v (get-signal wire)))
     (begin (set-car! wire v)
-           (for-each (lambda (x) (x)) (get-actionlist wire)))
+           (call-each (get-actionlist wire)))
     'done)
   )
 (define (add-action! wire no-arg-proc)
@@ -92,6 +93,14 @@
    'ok))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(define (insert-queue! time action time-queue)
+  (cond ((null? time-queue) (list (list time action)))
+        ((> time (caar time-queue))
+         (cons (car time-queue) (insert-queue! time action (cdr time-queue))))
+        ((= time (caar time-queue))
+         (set-cdr! (car time-queue) (cons action (cdar time-queue)))
+         time-queue)
+        (else (error "time flying..." time time-queue))))
 ;;; agenda
 (define (make-agenda)
   (let ((agenda '()))
@@ -99,9 +108,7 @@
    (define (first) (if (empty?) '() (car agenda)))
    (define (pop) (set! agenda (cdr agenda)))
    (define (add! time action)
-     (set! agenda (sort (cons (cons time action) agenda) ; stable sort
-                        (lambda (x y)
-                          (< (car x) (car y))))))
+     (set! agenda (insert-queue! time action agenda)))
    (define (disp) (for-each displayln agenda))
    (define (dispatch m)
      (cond ((eq? m 'empty?) empty?)
@@ -122,7 +129,7 @@
 (define (propagate)
   (if (empty-agenda? *agenda*) 'done
     (let ((first-item (first-agenda-action *agenda*)))
-     (first-item)
+     (call-each first-item)
      (remove-first-agenda *agenda*)
      (propagate))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -134,19 +141,10 @@
                       (display (get-signal wire))
                       (newline))))
 
-; test code
 (define *agenda* (make-agenda))
-(define input-1 (make-wire))
-(define input-2 (make-wire))
-(define sum (make-wire))
-(define carry (make-wire))
-
-(probe 'sum sum)
-(probe 'carry carry)
-
-(half-adder input-1 input-2 sum carry)
-
-(set-signal! input-1 1)
-
-((*agenda* 'display))
+; test code
+(define a (make-wire))
+(define b (make-wire))
+(probe 'out b)
+(inverter a b)
 (propagate)
