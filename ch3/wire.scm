@@ -19,7 +19,9 @@
   )
 (define (add-action! wire no-arg-proc)
   (set-cdr! wire (cons no-arg-proc (get-actionlist wire)))
-  (no-arg-proc))        ; why runit? TODO:
+  (no-arg-proc)
+  )        ; why runit? TODO:
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (after-delay dt proc)
@@ -79,7 +81,7 @@
 ;;; basic Arithmetic
 (define (half-adder a b s c)
   (let ((d (make-wire)) (e (make-wire)))
-   (or-gate a b d)          ; TODO: swap order, but get differenet ansewer!!!
+   (or-gate a b d)
    (and-gate a b c)
    (inverter c e)
    (and-gate d e s)
@@ -98,7 +100,8 @@
         ((> time (caar time-queue))
          (cons (car time-queue) (insert-queue! time action (cdr time-queue))))
         ((= time (caar time-queue))
-         (set-cdr! (car time-queue) (cons action (cdar time-queue)))
+         (set-cdr! (car time-queue)
+                   (append (cdar time-queue) (list action))) ; first-in
          time-queue)
         (else (cons (list time action) time-queue))))
 ;;; agenda
@@ -121,7 +124,7 @@
 
 (define (empty-agenda? agenda) ((agenda 'empty?)))
 (define (first-agenda-action agenda) (cdr ((agenda 'first))))
-(define (current-time agenda) (if (empty-agenda? agenda) 0 (car ((agenda 'first)))))
+(define (current-time agenda) (car ((agenda 'first))))
 (define (remove-first-agenda agenda) ((agenda 'pop)))
 (define (add-to-agenda! time action agenda) ((agenda 'add!) time action))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
