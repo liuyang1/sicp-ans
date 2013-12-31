@@ -100,10 +100,10 @@
         ((= time (caar time-queue))
          (set-cdr! (car time-queue) (cons action (cdar time-queue)))
          time-queue)
-        (else (error "time flying..." time time-queue))))
+        (else (cons (list time action) time-queue))))
 ;;; agenda
 (define (make-agenda)
-  (let ((agenda '()))
+  (let ((agenda '((0))))
    (define (empty?) (null? agenda))
    (define (first) (if (empty?) '() (car agenda)))
    (define (pop) (set! agenda (cdr agenda)))
@@ -142,9 +142,3 @@
                       (newline))))
 
 (define *agenda* (make-agenda))
-; test code
-(define a (make-wire))
-(define b (make-wire))
-(probe 'out b)
-(inverter a b)
-(propagate)
