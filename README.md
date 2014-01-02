@@ -5,6 +5,8 @@ My answer of SICP's exercise.
 
 Creating this repo is to promote myself to insiting on reading and study this bible.
 
+Mainly code developed by myself, and refer from SICP and guile & racket materials.
+
 FAQ
 ===
 

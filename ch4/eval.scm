@@ -52,3 +52,93 @@
                     (myeval (definition-value expr) env)
                     env)
   'ok)
+
+; 4.1.2
+(define (self-evaluating? expr)
+  (cond ((number? expr) #t)
+        ((string? expr) #t)
+        (else #f)))
+
+(define (variable? expr) (symbol? expr))
+
+; (quote TEXT-OF-QUOTATION)
+(define (quoted? expr) (tagged-list? expr 'quote))
+(define (text-of-quotation expr) (cadr expr))
+(define (tagged-list? expr tag)
+  (if (pair? expr) (eq? (car expr) tag)
+    #f))
+
+; (set! VAR VALUE)
+(define (assignment? expr) (tagged-list? expr 'set!))
+(define (assignment-variable expr) (cadr expr))
+(define (assignment-value expr) (caddr expr))
+
+; (define VAR VALUE)
+; (define (VAR PARAM1 PARAM...) BODY)
+; ->
+; (define VAR (lambda (PARA1 PARAM...) BODY))
+(define (definition? expr) (tagged-list? expr 'define))
+(define (definition-variable expr)
+  (if (symbol? (cadr expr))
+    (cadr expr)         ; (define VAR VALUE)
+    (caadr expr))       ; (define (VAR PARAM...) BODY)
+  )
+(define (definition-value expr)
+  (if (symbol? (cadr expr))
+    (caddr expr)
+    (make-lambda (cdadr expr) (cddr exp))))
+
+; lambda
+; (lambda (lambda-parameters lambda-body))
+(define (lambda? expr) (tagged-list? expr 'lambda))
+(define (lambda-parameters expr) (cadr expr))
+(define (lambda-body expr) (cddr expr))
+(define (make-lambda parameters body)
+  (cons 'lambda (cons parameters body)))
+
+; if
+; (if if-predicate if-consequent if-alternative)
+(define (if? expr) (tagged-list? expr 'if))
+(define (if-predicate expr) (cadr expr))
+(define (if-consequent expr) (caddr expr))
+(define (if-alternative expr) (if (not (null? (cdddr expr))) (cadddr expr) #f))
+(define (make-if predicate consequent alternative)
+  (list 'if predicate consequent alternative))
+
+; begin
+; (begin exp...)
+(define (begin? expr) (tagged-list? expr 'begin))
+(define (begin-actions expr) (cdr expr))
+(define (last-exp? seq) (null? (cdr seq)))
+(define (first-exp seq) (car seq))
+(define (rest-exps seq) (cdr seq))
+(define (sequence->expr seq)
+  (cond ((null? seq) seq)
+        ((last-exp? seq) (first-exp seq))
+        (else (make-begin seq))))
+(define (make-begin seq) (cons 'begin seq))
+
+(define (application? expr) (pair? expr))
+(define (operator expr) (car expr))
+(define (operands expr) (cdr expr))
+(define (no-operands? ops) (null? ops))
+(define (first-operand ops) (car ops))
+(define (rest-operands ops) (cdr ops))
+
+; cond
+(define (cond? expr) (tagged-list? expr 'cond))
+(define (cond-clauses expr) (cdr expr))
+(define (cond-else-clauses clause) (eq? (cond-predicate clause) 'else))
+(define (cond-predicate clause) (car clause))
+(define (cond-actions clause) (cdr clause))
+(define (cond->if expr)
+  (expand-clauses (cond-clauses expr)))
+(define (expand-clauses clauses)
+  (if (null? clauses) #f
+    (let ((first (car clauses)) (rest (cdr clauses)))
+     (if (cond-else-clause? first)
+       (if (null? rest) (sequence->expr (cond-actions first))
+         (error "ELSE clause isn't last -- COND->IF" clauses))
+       (make-if (cond-predicate first)
+                (sequence->expr (cond-actions first))
+                (expand-clauses rest))))))
