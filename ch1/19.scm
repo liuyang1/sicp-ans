@@ -4,7 +4,7 @@
 (define (fib-iter a b p q count)
   (cond ((= count 0)    b)
         ((even? count)  (fib-iter a
-                                  b 
+                                  b
                                   (+ (* p p) (* q q))
                                   (+ (* 2 p q) (* q q))
                                   (/ count 2)))
@@ -16,8 +16,5 @@
                                   ))))
 
 
-(define (test n)
-  (if (= n 20) n
-    ((displayln (fib n)) (test (+ n 1)))))
-
-(test 1)
+(display (fib 10))
+(newline)
