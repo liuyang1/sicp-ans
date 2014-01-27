@@ -2,7 +2,7 @@
   (cond ((self-evaluating? expr)    expr)
         ((variable? expr)           (lookup-variable-value expr env))
         ((quoted? expr)             (text-of-quotation expr))
-        ((assignment? expr)         (eval-assignment? expr env))
+        ((assignment? expr)         (eval-assignment expr env))
         ((definition? expr)         (eval-definition expr env))
         ((if? expr)                 (make-procedure
                                       (lambda-parameters expr)
@@ -128,7 +128,7 @@
 ; cond
 (define (cond? expr) (tagged-list? expr 'cond))
 (define (cond-clauses expr) (cdr expr))
-(define (cond-else-clauses clause) (eq? (cond-predicate clause) 'else))
+(define (cond-else-clause? clause) (eq? (cond-predicate clause) 'else))
 (define (cond-predicate clause) (car clause))
 (define (cond-actions clause) (cdr clause))
 (define (cond->if expr)
