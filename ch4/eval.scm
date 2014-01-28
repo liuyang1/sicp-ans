@@ -208,3 +208,37 @@
            (eq? var (car vars)) (set-car! vals val)
            (else (scan (cdr vars) (cdr vals)))))
    (scan (frame-var frame) (frame-val frame))))
+
+; 4.1.4
+(define primitive-procedures
+  (list (list 'car car) (list 'cdr cdr) (list 'cons cons) (list 'null? null?)
+        ; others
+        ))
+
+(define (primitive-procedure-objects)
+  (map (lambda (proc) (list 'primitive (cadr proc)))
+       primitive-procedures))
+(define (primitive-procedure-names)
+  (map car primitive-procedures))
+
+(define (setup-env)
+  (let ((initial-env (extend-env (primitive-procedure-names)
+                                 (primitive-procedure-objects)
+                                 the-empty-env)))
+    (define-variable! 'true #t initial-env)
+    (define-variable! 'false #f initial-env)
+    initial-env))
+
+(define *global-env* (setup-env))
+
+(define (primitive-procedure? proc)
+  (tagged-list? proc 'primitive))
+(define (primitive-implementation proc) (cadr proc))
+
+(define (apply-primitive-procedure proc args)
+  (apply-in-underlying-scheme
+    (primitive-implementation proc) args))
+
+(define (apply-in-underlying-scheme primitive-proc args)
+  (display primitive-proc) (display " ") (display args)
+  (newline))
