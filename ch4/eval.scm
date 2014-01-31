@@ -1,3 +1,5 @@
+(define (displayln x) (display x) (newline) x)
+; exer 4.2
 (define (myeval expr env)
   (cond ((self-evaluating? expr)    expr)
         ((variable? expr)           (lookup-variable-value expr env))
@@ -31,6 +33,8 @@
     (cons (myeval (first-operand exps) env)
           (list-of-value-origin (rest-operands exps) env))))
 
+; exer 4.1
+; using LET, setting calc sequence
 (define (list-of-value-left-right exps env)
   (if (no-operands? exps) '()
     (let ((left (myeval (first-operand exps) env)))
@@ -218,13 +222,19 @@
        (scan (frame-var frame) (frame-val frame)))))
   (env-loop env))
 
+; when env is THE-EMPTY-ENV, frame <= (first-frame env) is error
 (define (define-variable! var val env)
-  (let ((frame (first-frame env)))
-   (define (scan vars vals)
-     (cond ((null? vars) (add-binding-to-frame! var val frame))
-           (eq? var (car vars)) (set-car! vals val)
-           (else (scan (cdr vars) (cdr vals)))))
-   (scan (frame-var frame) (frame-val frame))))
+  (if (eq? env the-empty-env)
+    (extend-env (list var) (list val) env)
+    (let ((frame (first-frame env)))
+     (define (scan vars vals)
+       (cond ((null? vars)
+              (add-binding-to-frame! var val frame))
+             ((eq? var (car vars))
+              (set-car! vals val))
+             (else
+               (scan (cdr vars) (cdr vals)))))
+     (scan (frame-var frame) (frame-val frame)))))
 
 ; 4.1.4
 (define primitive-procedures
