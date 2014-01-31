@@ -26,11 +26,28 @@
           (error "Unknown procedure type -- MYAPPLY" procedure))))
 
 ;;;
-(define (list-of-value exps env)
+(define (list-of-value-origin exps env)
   (if (no-operands? exps) '()
     (cons (myeval (first-operand exps) env)
-          (list-of-value (rest-operands exps) env))))
+          (list-of-value-origin (rest-operands exps) env))))
 
+(define (list-of-value-left-right exps env)
+  (if (no-operands? exps) '()
+    (let ((left (myeval (first-operand exps) env)))
+     (display left) (newline)
+     (cons left
+           (list-of-value-left-right (rest-operands exps) env)))))
+
+(define (list-of-value-right-left exps env)
+  (if (no-operands? exps) '()
+    (let ((right (list-of-value-right-left (rest-operands exps) env)))
+     (display right) (newline)
+     (cons (myeval (first-operand exps) env)
+           right))))
+
+(define list-of-value list-of-value-left-right)
+
+;;;
 (define (eval-if expr env)
   (if (= #t (myeval (if-predicate expr) env))
     (myeval (if-consequent expr) env)
