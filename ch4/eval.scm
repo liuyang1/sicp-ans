@@ -209,6 +209,21 @@
        (scan (frame-var frame) (frame-val frame)))))
   (env-loop env))
 
+(define (dispFrame frame)
+  (define (scan vars vals)
+    (cond ((null? vars) 'ok)
+          (else (display "\t") (display (car vars)) (display " -> ") (display (car vals))
+                (newline)
+                (scan (cdr vars) (cdr vals)))))
+  (scan (frame-var frame) (frame-val frame)))
+
+(define (dispEnv env)
+  (define (scan num env)
+    (cond ((eq? env the-empty-env) 'end)
+          (else (display "Frame: ") (display num) (newline)
+                (dispFrame (car env)) (scan (- num 1) (cdr env)))))
+  (scan (- (length env) 1) env))
+
 ; var in env
 (define (set-variable-value! var val env)
   (define (env-loop env)
@@ -239,6 +254,7 @@
 ; 4.1.4
 (define primitive-procedures
   (list (list 'car car) (list 'cdr cdr) (list 'cons cons) (list 'null? null?)
+        (list '+ +)
         ; others
         ))
 
