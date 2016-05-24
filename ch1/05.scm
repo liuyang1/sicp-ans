@@ -17,5 +17,6 @@
 
 ; for this statement,
 ; applicative sequence, interp will loop apply on (p) try to get result of p.
+;       so there is a dead loop.
 ; regular sequence, interp will not apply on (p), will directly get result 0.
 (test 0 (p))

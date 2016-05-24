@@ -4,6 +4,7 @@
 (displayln (/ 6 2))
 (displayln (+ (* 2 4) (- 4 6)))
 
+; NO output
 (define a 3)
 (define b (+ a 1))
 
