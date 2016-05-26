@@ -27,16 +27,17 @@
 
 (define (report-prime n start-time end-time)
   (display n)
-  (display " ")
+  (display "\t")
   (display (- end-time start-time))
   (newline))
 
 
-(define (search-for-primes begin-value)
-  (if (not (timed-prime-test begin-value))
-    (search-for-primes (+ begin-value 1))
-    #t))
+(define (search-for-primes begin-value num)
+  (cond ((= num 0) #t)
+        ((not (timed-prime-test begin-value)) (search-for-primes (+ begin-value 1) num))
+        (else (search-for-primes (+ begin-value 1) (- num 1)))))
 
-(search-for-primes 1000)
-(search-for-primes (* 1000 1000))
-(search-for-primes (* 1000 1000 1000))
+(search-for-primes 1000 3)
+(search-for-primes (* 1000 10) 3)
+(search-for-primes (* 1000 100) 3)
+(search-for-primes (* 1000 1000) 3)

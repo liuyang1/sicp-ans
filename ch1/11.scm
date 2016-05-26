@@ -1,3 +1,6 @@
+; define one function
+; when n < 3, f(n) = n
+; else, f(n) = f(n - 1) + 2 * f(n - 2) + 3 * f(n - 3)
 (define (f-rec n)
   (if (< n 3) n
     (+ (f-rec (- n 1))

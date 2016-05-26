@@ -8,3 +8,6 @@
 ; for test
 (display (fast-expt 2 3))
 (newline)
+
+; keep (a * b ^ n) not change
+; when n == 0, then get final result

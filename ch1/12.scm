@@ -9,15 +9,5 @@
         ((= n 1) '(1 1))
         (else (inc (pascal-line (- n 1))))))
 
-; this should not need to do this.
-; because this have so much repeating calc.
-(define (disp-pascal n)
-  (define (helper i)
-    (if (< i n)
-      (begin  (display (pascal-line i)) 
-              (newline)
-              (helper (+ i 1)))
-      #t))
-  (helper 0))
-
-(disp-pascal 10)
+(define (compose f g) (lambda (x) (f (g x))))
+(map (compose displayln pascal-line) (range 15))

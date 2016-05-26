@@ -10,9 +10,14 @@
           ((even? b)    (ip m (double a) (halve b)))
           (else         (ip (+ m a) a (- b 1))))) 
   (ip 0 a b))
+; keep (a * b + m) is not change
 
 ; test
 (displayln (asterisk 2 3))
 (displayln (asterisk -2 3))
 (displayln (asterisk 2 -3))
 (displayln (asterisk -2 -3))
+(displayln (asterisk 3 2))
+(displayln (asterisk 0 3))
+(displayln (asterisk 2 0))
+(displayln (asterisk 0 0))

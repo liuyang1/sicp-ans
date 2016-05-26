@@ -14,7 +14,7 @@
 (define (range start stop step)
   (if (> start stop) '()
     (cons start (range (+ start step) stop step))))
-(define *seq* (range 0 4 1))
+(define *seq* (range 0 5 1))
 (displayln *seq*)
 
 (define (f n) (Ackermann 0 n))
