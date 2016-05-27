@@ -2,12 +2,14 @@
 
 (provide (all-defined-out))
 
+(define (set-next-fn! fn) (set! next-fn fn))
+(define (set-prime?! fn) (set! prime? fn))
+
 (define (square x) (* x x))
 
 (define (divides? a b)
   (= (remainder b a ) 0))
 
-(define (set-next-fn! fn) (set! next-fn fn))
 ; place-holder may change by other module
 (define (next-fn x) (+ 1 x))
 
@@ -15,7 +17,6 @@
   (cond ((> (square test-divisor) n) n)
         ((divides? test-divisor n) test-divisor)
         (else (find-divisor n (next-fn test-divisor)))))
-
 
 (define (smallest-divisor n)
   (find-divisor n 2))
@@ -50,3 +51,13 @@
   (search-for-primes (* 1000 10) 3)
   (search-for-primes (* 1000 100) 3)
   (search-for-primes (* 1000 1000) 3))
+
+; for fermant and miller-rabin algo
+(define (expmod base expr m)
+  (cond ((= expr 0) 1)
+        ((even? expr)
+         (remainder (square (expmod base (/ expr 2) m))
+                    m))
+        (else
+          (remainder (* base (expmod base (- expr 1) m))
+                     m))))
