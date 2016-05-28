@@ -1,14 +1,25 @@
-(define (cont-frac ni di k)
-  (define (cont val k)
-    (if (= k 0) val
-      (cont (/ (ni k) (+ (di k) val)) (- k 1))))
-  (cont 0.0 k))
+#lang racket
+(require "cont-frac.scm")
 
-(define (cont-frac-rec ni di k)
-  (define (cont i)
-    (if (= i k) (/ (ni k) (di k))
-      (/ (ni i) (+ (di i) (cont (+ i 1))))))
-  (cont 1))
+(define one (lambda (x) 1.0))
 
-(displayln (cont-frac (lambda (x) 1) (lambda (x) 1) 100))
-(displayln (cont-frac-rec (lambda (x) 1.0) (lambda (x) 1) 100))
+(cont-frac one one 10)
+(cont-frac-rec one one 10)
+
+(define (cont-frac-step k)
+  (cont-frac one one k))
+
+(define *phi* (/ 2 (+ 1 (sqrt 5))))
+*phi*
+
+(define (close? a b)
+  (< (abs (- a b)) 0.0001))
+
+(define (find-step)
+  (define (try k)
+    (if (close? (cont-frac-step k) *phi*)
+      k
+      (try (+ k 1))))
+  (try 1))
+
+(find-step)
