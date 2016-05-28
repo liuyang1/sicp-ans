@@ -1,9 +1,11 @@
+#lang racket
 (define (sum term a next b)
-  (define (iter a result)
-    (if (> a b) result 
-      (iter (next a) (+ result (term a)))))
-  (iter a 0))
+  (define (iter a [acc 0])
+    (if (> a b)
+      acc
+      (iter (next a) (+ acc (term a)))))
+  (iter a))
 
 (define (func a) a)
 (define (inc a) (+ a 1))
-(displayln (sum func 1 inc 10))
+(sum func 1 inc 10)

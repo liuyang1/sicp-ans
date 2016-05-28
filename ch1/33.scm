@@ -1,3 +1,4 @@
+#lang racket
 (define (filt-acc comb null term a next b filt)
   (define (acc v)
     (if (>= v b) null
@@ -21,10 +22,11 @@
 (define (prime? n)
   (= n (find-divisor n 2)))
 
-(displayln (filt-acc + 0 self 1 inc 10 TRUE))
-(displayln (filt-acc + 0 self 2 inc 10 prime?))
+(filt-acc + 0 self 1 inc 10 TRUE)
+(filt-acc + 0 self 2 inc 10 prime?)
 
 (define (prod-prime n)
   (define (gcd? a) (= (gcd a n) 1))
   (filt-acc * 1 self 2 inc n gcd?))
-(displayln (prod-prime 7))
+(prod-prime 7)
+(prod-prime 6)
