@@ -1,3 +1,4 @@
+#lang racket
 (define (square x) (* x x))
 
 (define (square-list-0 items)
@@ -8,5 +9,5 @@
   (map square items))
 
 (define lst (list 0 1 2 3 4 5))
-(displayln (square-list-0 lst))
-(displayln (square-list-1 lst))
+(square-list-0 lst)
+(square-list-1 lst)

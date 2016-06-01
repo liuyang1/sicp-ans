@@ -10,11 +10,21 @@ Mainly code developed by myself, and refer from SICP and guile & racket material
 FAQ
 ===
 
+### How to run it?
+
+    racket [filename]
+
 ### What is displayln?
 
-In racket, this is a internal function.But for some else intepreter, maybe not exist this func.
+In racket, this is a internal function. But for some other intepreter, maybe not exist this func.
 
-So simply (define (displayln x) (display x) (newline)).
+So simply
+
+    (define (displayln x) (display x) (newline)).
+
+I had run code with `racket -f [filename]`. This option `-f` forbid default output, so I use `displayln`.
+
+However, find it is useless when run with `racket [filename]`. Still keep it for some old code.
 
 ### Why you display the answer, it seem not useful?
 

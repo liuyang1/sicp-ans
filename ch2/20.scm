@@ -1,3 +1,4 @@
+#lang racket
 (define (same-parity first . other)
   (let ((proper (even? first)))
    (define (ip other res)
@@ -8,10 +9,6 @@
         (ip (cdr other) res)))))
    (cons first (ip other '()))))
 
-(displayln "same-parity")
-(displayln (same-parity 1 2 3 4 5 6 7))
-(displayln (same-parity 2 3 4 5 6 7))
-
 (define (same-parity-2 first . other)
   (let ((proper (even? first)))
   (define (same first other)
@@ -20,6 +17,11 @@
         (cons (car other) (same first (cdr other)))
         (same first (cdr other)))))
   (cons first (same first other))))
-(displayln "same-parity-2")
-(displayln (same-parity-2 1 2 3 4 5 6 7))
-(displayln (same-parity-2 2 3 4 5 6 7))
+
+(define (test-case fn)
+  (displayln fn)
+  (displayln (fn 1 2 3 4 5 6 7))
+  (displayln (fn 2 3 4 5 6 7)))
+
+(test-case same-parity)
+(test-case same-parity-2)

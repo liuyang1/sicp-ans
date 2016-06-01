@@ -1,5 +1,5 @@
+#lang racket
 (define us-coins (list 50 25 10 5 1))
-(define reverse-us-coins (reverse us-coins))
 (define uk-coins (list 100 50 20 10 5 2 1 0.5))
 (define cn-coins uk-coins)
 
@@ -14,8 +14,14 @@
                  (cc (- amount (first-denomination coin-values))
                      coin-values)))))
 
-(displayln (cc 7 us-coins))
-(displayln (cc 27 us-coins))
-(displayln (cc 7 reverse-us-coins))
-(displayln (cc 27 reverse-us-coins))
-(displayln (cc 27 (list 5 1 10)))
+(define *comb* (cc 100 us-coins))
+
+(define (rand-test coins v)
+  (let* ((s (shuffle coins))
+        (rt (cc 100 s)))
+   (displayln s)
+   (displayln rt)
+   (= rt v)))
+
+(map (lambda (x) (rand-test us-coins *comb*)) (range 10))
+; change sequence of coins, not affect solution from CC
