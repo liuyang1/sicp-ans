@@ -1,3 +1,4 @@
+#lang racket
 (define (flatmap proc seq)
   (accumulate append '() (map proc seq)))
 
@@ -18,11 +19,9 @@
                   (enumerate-interval 1 (- i 1))))
            (enumerate-interval 1 n)))
 
-(define (sum-3 n)
+(define (sum-3 s n)
   (define (isSum3? lst)
-    (= n (accumulate + 0 lst)))
+    (= s (accumulate + 0 lst)))
   (filter isSum3? (unique-3-pairs (- n 3))))
 
-; (map displayln (unique-3-pairs 5))
-; (map displayln (map (lambda (x) (accumulate + 0 x)) (unique-3-pairs 5)))
-(map displayln (sum-3 10))
+(sum-3 12 10)

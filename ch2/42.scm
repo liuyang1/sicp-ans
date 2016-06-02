@@ -1,3 +1,6 @@
+#lang racket
+
+(provide (all-defined-out))
 (define (flatmap proc seq)
   (accumulate append '() (map proc seq)))
 
@@ -51,13 +54,12 @@
               (flatmap (lambda (rest-of-queens)
                          (map (lambda (new-row)
                                 (adjoin-position new-row k rest-of-queens))
-                              (range 1 board-size)
-                           ))
+                              (range 1 board-size)))
                        (queen-cols (- k 1))))))
   (queen-cols board-size))
 
 ; 这个算法速度非常快啊,令人惊讶.其实并不快的.
 ; 这个算法,因为会枚举各种情况,因此需要的内存容量也比较大.
 ; 对于规模为13的问题,可能就需要几百M内存了.(使用guile)
-(define (displayln x) (display x) (newline))
-(map displayln (queens 13))
+(define (test-case)
+  (map displayln (queens 8)))

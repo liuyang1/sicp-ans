@@ -1,3 +1,4 @@
+#lang racket
 (define (tree-map func tree)
   (define (helper tree)
     (if (not (list? tree)) (func tree)

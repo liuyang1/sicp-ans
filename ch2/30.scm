@@ -1,3 +1,4 @@
+#lang racket
 (define (square-tree-direct x)
   (cond ((not (list? x)) (square x))
         ((null? x) x)

@@ -1,3 +1,4 @@
+#lang racket
 (define (find-divisor n test-divisor)
   (define (square a) (* a a))
   (define (next-divisor val) (if (<= val 2) (+ val 1) (+ val 2)))

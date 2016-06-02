@@ -1,3 +1,4 @@
+#lang racket
 (define (accumulate op initial sequence)
   (if (null? sequence) initial
     (op (car sequence)

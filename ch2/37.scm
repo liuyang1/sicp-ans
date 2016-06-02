@@ -1,3 +1,4 @@
+#lang racket
 (define (accumulate op initial sequence)
   (if (null? sequence) initial
     (op (car sequence)
@@ -26,7 +27,7 @@
 
 (define *test-vector0* (list 1 2 3))
 (define *test-vector1* (list 3 2 1))
-; (displayln (dot-product *test-vector0* *test-vector1*))
+(dot-product *test-vector0* *test-vector1*)
 
 (define *test-matrix* (list (list 1 2) (list 1 0)))
 (define *test-vector* (list 1 2))
