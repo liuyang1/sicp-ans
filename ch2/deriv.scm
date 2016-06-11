@@ -10,6 +10,17 @@
 (define (=number? expr num)
   (and (number? expr) (= expr num)))
 
+;;; for prefix expression
+(define (build-expr symbol v1 v2) (list symbol v1 v2))
+(define symbol car)
+(define fst-operand cadr)
+(define snd-operand caddr)
+; use rst-operand instead snd-operand to work for '(+ x y z) expression
+(define (rst-operand s)
+  (if (= 3 (length s))
+    (snd-operand s)
+    (cons (symbol s) (cddr s))))
+
 ; add
 (define add-symbol '+)
 (define (make-sum a1 . a2)
@@ -17,17 +28,13 @@
     (cond ((=number? a1 0) a2)
           ((=number? a2 0) a1)
           ((and (number? a1) (number? a2)) (+ a1 a2))
-          (else (list add-symbol a1 a2))))
+          (else (build-expr add-symbol a1 a2))))
   (if (null? (cdr a2))
     (helper a1 (car a2))
     (make-sum a1 (make-sum (car a2) (cdr a2)))))
-(define (sum? x) (and (pair? x) (eq? (car x) add-symbol)))
-(define (addend s) (cadr s))
-; to support multiple augend, like this style (+ 1 2 3)
-(define (augend s)
-  (if (= 3 (length s))
-    (caddr s)
-    (cons add-symbol (cddr s))))
+(define (sum? x) (and (pair? x) (eq? (symbol x) add-symbol)))
+(define addend fst-operand)
+(define augend rst-operand)
 
 ; multiply
 (define product-symbol '*)
@@ -36,13 +43,10 @@
         ((=number? m1 1) m2)
         ((=number? m2 1) m1)
         ((and (number? m1) (number? m2)) (* m1 m2))
-        (else (list product-symbol m1 m2))))
-(define (product? x) (and (pair? x) (eq? (car x) product-symbol)))
-(define (multiplier p) (cadr p))
-(define (multiplicand p)
-  (if (= 3 (length p))
-    (caddr p)
-    (cons product-symbol (cddr p))))
+        (else (build-expr product-symbol m1 m2))))
+(define (product? x) (and (pair? x) (eq? (symbol x) product-symbol)))
+(define multiplier fst-operand)
+(define multiplicand rst-operand)
 
 ;;; 56. add exponentiation
 (define expo-symbol '^)
@@ -50,16 +54,47 @@
   (cond ((=number? expo 0) 1)
         ((=number? base 1) 1)
         ((=number? expo 1) base)
-        (else (list expo-symbol base expo))))
-(define (exponentiation? x) (and (pair? x) (eq? (car x) expo-symbol)))
-(define (base expr) (cadr expr))
-(define (expo expr) (caddr expr))
+        (else (build-expr expo-symbol base expo))))
+(define (exponentiation? x) (and (pair? x) (eq? (symbol x) expo-symbol)))
+(define base fst-operand)
+(define expo snd-operand)
+
+;;; for CSE341 assignment 1
+; https://courses.cs.washington.edu/courses/cse341/15au/assignments/racket-warmup.pdf
+; 5. add minus operator
+(define minus-symbol '-)
+(define (make-minus m . s)
+  (define (helper m s)
+    (cond ((and (number? m) (number? s)) (- m s))
+          ((=number? s 0) m)
+          ((=number? m 0) (cons minus-symbol s))
+          (else (build-expr minus-symbol m s))))
+  (if (null? (cdr s))
+    (helper m (car s))
+    (make-minus m (make-sum (car s) (cdr s)))))
+(define (minus? x) (and (pair? x) (eq? (symbol x) minus-symbol)))
+(define minuend fst-operand)
+(define (subtrahend x)
+  (if (= 3 (length x))
+    (snd-operand x)
+    (cons add-symbol (cddr x))))
+
+; 5, add sin/cos operator
+(define sin-symbol 'sin)
+(define cos-symbol 'cos)
+(define (make-sin x) (list sin-symbol x))
+(define (make-cos x) (list cos-symbol x))
+(define (sin? x) (and (pair? x) (eq? (symbol x) sin-symbol)))
+(define (cos? x) (and (pair? x) (eq? (symbol x) cos-symbol)))
+(define radius fst-operand)
 
 (define (deriv expr var)
   (cond ((number? expr)     0)
         ((variable? expr)   (if (same-variable? expr var) 1 0))
         ((sum? expr)        (make-sum (deriv (addend expr) var)
                                       (deriv (augend expr) var)))
+        ((minus? expr)      (make-minus (deriv (minuend expr) var)
+                                        (deriv (subtrahend expr) var)))
         ((product? expr)    (make-sum
                               (make-product (multiplicand expr)
                                             (deriv (multiplier expr) var))
@@ -70,6 +105,8 @@
            (make-product (expo expr)
                          (make-expo (base expr) (- (expo expr) 1)))
            (deriv (base expr) var)))
+        ((sin? expr) (make-cos (radius expr)))
+        ((cos? expr) (make-minus 0 (make-sin (radius expr))))
         (else (error "unknown expression type --DERIV" expr))))
 
 (define (unit-test sample expect)
