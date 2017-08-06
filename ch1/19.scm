@@ -1,3 +1,4 @@
+#lang racket
 (define (fib n)
   (fib-iter 1 0 0 1 n))
 
@@ -15,5 +16,4 @@
                                   (- count 1)))))
 
 
-(display (fib 10))
-(newline)
+(fib 1000)

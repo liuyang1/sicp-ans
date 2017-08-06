@@ -1,3 +1,4 @@
+#lang racket
 (define (double a) (* a 2))
 (define (halve a) (/ a 2))
 
@@ -13,11 +14,11 @@
 ; keep (a * b + m) is not change
 
 ; test
-(displayln (asterisk 2 3))
-(displayln (asterisk -2 3))
-(displayln (asterisk 2 -3))
-(displayln (asterisk -2 -3))
-(displayln (asterisk 3 2))
-(displayln (asterisk 0 3))
-(displayln (asterisk 2 0))
-(displayln (asterisk 0 0))
+(asterisk 2 3)
+(asterisk -2 3)
+(asterisk 2 -3)
+(asterisk -2 -3)
+(asterisk 3 2)
+(asterisk 0 3)
+(asterisk 2 0)
+(asterisk 0 0)

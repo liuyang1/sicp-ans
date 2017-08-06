@@ -1,9 +1,10 @@
+#lang racket
 (define (gcd a b)
   (if (= b 0)
     a
     (gcd b (remainder a b))))
 
-(displayln (gcd 206 40))
+(gcd 206 40)
 ; 206 40
 ; 40 6
 ; 6 4

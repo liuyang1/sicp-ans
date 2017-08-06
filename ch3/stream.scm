@@ -1,3 +1,4 @@
+#lang racket
 (define (prime? x)
   (define (try n)
     (cond ((> (* n n) x) #t) 

@@ -1,3 +1,4 @@
+#lang racket
 (define empty-stream '())
 (define stream-null? null?)
 (define-syntax stream-cons
