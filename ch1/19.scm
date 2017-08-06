@@ -12,8 +12,7 @@
                                   (+ (* b p) (* a q))
                                   p
                                   q
-                                  (- count 1)
-                                  ))))
+                                  (- count 1)))))
 
 
 (display (fib 10))

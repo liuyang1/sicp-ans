@@ -1,3 +1,4 @@
+#lang racket
 (displayln 10)
 (displayln (+ 5 3 4))
 (displayln (- 9 1))
