@@ -33,24 +33,27 @@
     #f))
 
 (define (report-prime n start-time end-time)
-  (display n)
-  (display " *** ")
-  (display (- end-time start-time))
-  (newline))
+  (printf "~A *** ~A~n" n (- end-time start-time)))
 
 (define (search-for-primes begin-value num)
-  (define (hl bg num)
-    (cond ((= num 0) #t)
-          ((not (timed-prime-test bg)) (hl (+ 2 bg) num))
-          (else (hl(+ 2 bg) (- num 1)))))
-  (cond ((even? begin-value) (hl (+ 1 begin-value) num))
-        (else (hl begin-value num))))
+  (define (helper bg num)
+    (if (= num 0) #t
+      (helper (+ bg 2)
+              (if (not (timed-prime-test bg))
+                num
+                (- num 1)))))
+  (helper (if (even? begin-value) (+ begin-value 1) begin-value)
+          num))
+
+(define (seq fn x times)
+  (if (= times 1) (list x)
+    (cons x (seq fn (fn x) (- times 1)))))
+(define (iter x) (* 10 x))
+(define *seq* (seq iter 10 10))
 
 (define (test-case)
-  (search-for-primes 1000 3)
-  (search-for-primes (* 1000 10) 3)
-  (search-for-primes (* 1000 100) 3)
-  (search-for-primes (* 1000 1000) 3))
+  (map (lambda (x) (search-for-primes x 3))
+       *seq*))
 
 ; for fermant and miller-rabin algo
 (define (expmod base expr m)
