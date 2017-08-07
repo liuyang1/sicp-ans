@@ -1,34 +1,41 @@
 #lang racket
-(define (accumulate-rec combiner null-value term a next b)
+(define (accumulate-rec combiner unit-value term a next b)
   (if (> a b)
-    null-value
+    unit-value
     (combiner (term a)
-              (accumulate-rec combiner null-value term (next a) next b))))
+              (accumulate-rec combiner unit-value term (next a) next b))))
 
-(define (accumulate-iter combiner null-value term a next b)
+(define (accumulate-iter combiner unit-value term a next b)
   (define (ip a result)
     (if (> a b)
       result
       (ip (next a) (combiner (term a) result))))
-  (ip a null-value))
+  (ip a unit-value))
 
 ; test code
 (define (sum term a next b)
   (accumulate + 0 term a next b))
 
-(define (product term a next b)
+(define (prod term a next b)
   (accumulate * 1 term a next b))
 
-(define (self a) a)
+(define (range term a next b)
+  (accumulate cons '() term a next b))
+
+(define (id a) a)
 (define (inc a) (+ a 1))
 
-(define (fact n) (product self 1 inc n))
-(define (accu n) (sum self 1 inc n))
+(define (fact n) (prod id 1 inc n))
+(define (accu n) (sum id 1 inc n))
+(define (rang n) (range id 1 inc n))
 
 (define (test-case)
-  (begin (displayln (fact 5))
-         (displayln (accu 10))
-         #t))
+  (let ((n 10))
+   (begin
+     (displayln (rang n))
+     (displayln (accu n))
+     (displayln (fact n))
+     #t)))
 
 (define accumulate accumulate-iter)
 (test-case)

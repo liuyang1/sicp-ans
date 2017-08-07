@@ -2,11 +2,13 @@
 (define (cube x) (* x x x))
 (define (pow4 x) (* x x x x))
 
+; default option [n 100], n default to 100
 (define (simph f a b [n 100])
   (define (sum f a b h)
     (if (= a b)
       (f b)
-      (+ (* 2 (f a)) (* 4 (f (+ a h)))
+      (+ (* 2 (f a))
+         (* 4 (f (+ a h)))
          (sum f (+ a (* h 2)) b h))))
   (define (integral f a b h)
     (* (/ h 3) (- (sum f a b h) (f a))))

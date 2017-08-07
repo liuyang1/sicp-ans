@@ -6,6 +6,8 @@
       (iter (next a) (+ acc (term a)))))
   (iter a))
 
-(define (func a) a)
+(define (id a) a)
 (define (inc a) (+ a 1))
-(sum func 1 inc 10)
+(sum id 1 inc 10)
+(sum (lambda (x) (* x x))
+     1 inc 10)

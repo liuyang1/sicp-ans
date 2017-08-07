@@ -49,7 +49,7 @@
   (if (= times 1) (list x)
     (cons x (seq fn (fn x) (- times 1)))))
 (define (iter x) (* 10 x))
-(define *seq* (seq iter 10 10))
+(define *seq* (seq iter 10 9))
 
 (define (test-case)
   (map (lambda (x) (search-for-primes x 3))

@@ -3,17 +3,20 @@
 (require "prime-check.rkt")
 
 (define (isord2? a n)
-  (and (not (= a 1)) (not (= (- a 1) n)) (= (remainder (square a) n) 1)))
+  (and (not (= a 1))
+       (not (= (- a 1) n))
+       (= (remainder (square a) n) 1)))
 
 (define (miller-rabin n)
   (define (try-it a)
-    (and (not (isord2? a n)) (= (expmod a (- n 1) n) 1)))
+    (and (not (isord2? a n))
+         (= (expmod a (- n 1) n) 1)))
   (try-it (+ 2 (random (- n 2)))))
 
 (define (fast-prime? n times)
-  (cond ((= times 0) true)
+  (cond ((= times 0) #t)
         ((miller-rabin n) (fast-prime? n (- times 1)))
-        (else false)))
+        (else #f)))
 
 (define (miller-rabin-prime? n) (fast-prime? n 100))
 

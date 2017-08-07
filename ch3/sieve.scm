@@ -1,3 +1,4 @@
+#lang racket
 ; basic proc
 (define empty-stream '())
 (define stream-null? null?)
@@ -10,7 +11,7 @@
 
 (define (range low)
   (let ((next (+ 1 low)))
-  (stream-cons low (range next))))
+   (stream-cons low (range next))))
 
 (define (stream-ref s n)
   (if (= n 0)

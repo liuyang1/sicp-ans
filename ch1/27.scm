@@ -6,10 +6,9 @@
   (define (ismod? a n)
     (= (expmod a n n) a))
   (define (loopcheck a n)
-    (cond ((= a n) true)
+    (cond ((= a n) #t)
           ((ismod? a n) (loopcheck (+ a 1) n))
-          (else false))
-    )
+          (else #f)))
   (and (loopcheck 2 n) (not (prime? n))))
 
 (not (carmichael? 100))
