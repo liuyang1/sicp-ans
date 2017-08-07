@@ -1,3 +1,4 @@
+#lang racket
 (define (square a) (* a a))
 
 (define (smallest-divisor n)
@@ -11,9 +12,22 @@
 (define (divides? a b)
   (= (remainder b a) 0))
 
-(define (test-smallest-diviso n)
-  (displayln (smallest-divisor n)))
+(define (seq fn x times)
+  (if (= times 1) (list x)
+    (cons x (seq fn (fn x) (- times 1)))))
 
-(test-smallest-diviso 199)
-(test-smallest-diviso 1999)
-(test-smallest-diviso 19999)
+(define (fn x) (+ 9 (* 10 x)))
+(define *seq* (seq fn 1 10))
+*seq*
+
+(map smallest-divisor *seq*)
+
+(define (iter f x)
+  (cons x (iter f (f x))))
+(define (take n iterlst)
+  (if (= n 0) '()
+    (cons (car iterlst)
+          (take (- n 1) (cdr iterlst)))))
+
+; (define *lazyseq* (take 10 (iter fn 1)))
+; implement lazy-seq need stream related funciton, such as DELAY and FORCE.

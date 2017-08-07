@@ -1,3 +1,4 @@
+#lang racket
 (define (square x) (* x x))
 (define (average x y) (/ (+ x y) 2.0))
 
@@ -17,7 +18,10 @@
       (sqrt-iter (improve guess))))
   (sqrt-iter 1.0))
 
-(displayln (sqrt 1000 good-enough?-bad))
-(displayln (sqrt 0.001 good-enough?-bad))
-(displayln (sqrt 1000 good-enough?-good))
-(displayln (sqrt 0.001 good-enough?-good))
+(define (test estimate)
+  (map (lambda (x)
+         (sqrt x estimate))
+       '(0.000001 0.001 1.0 1000 1000000)))
+
+(test good-enough?-bad)
+(test good-enough?-good)

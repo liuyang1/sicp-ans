@@ -1,3 +1,4 @@
+#lang racket
 ; define one function
 ; when n < 3, f(n) = n
 ; else, f(n) = f(n - 1) + 2 * f(n - 2) + 3 * f(n - 3)
@@ -6,10 +7,6 @@
     (+ (f-rec (- n 1))
        (* 2 (f-rec (- n 2)))
        (* 3 (f-rec (- n 3))))))
-
-(define *seq* '(0 1 2 3 4 5 6))
-(display (map f-rec *seq*))
-(newline)
 
 ; iterative verison
 ; using f(n-1) f(n-2) f(n-3) as function arguments
@@ -21,5 +18,7 @@
   (if (< n 3) n
     (helper 3 2 1 0)))
 
-(display (map f-iter *seq*))
-(newline)
+(define *seq* (range 10))
+(map (lambda (f)
+       (map f *seq*))
+     (list f-rec f-iter))

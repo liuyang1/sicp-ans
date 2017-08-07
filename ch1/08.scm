@@ -1,3 +1,4 @@
+#lang racket
 (define (square x) (* x x))
 (define (cubic x) (* x x x))
 
@@ -13,6 +14,5 @@
       (cube-root-iter (improve guess x))))
   (cube-root-iter 1.0))
 
-(displayln (cube-root 10))
-(displayln (cube-root 100))
-(displayln (cube-root 1000))
+(map cube-root
+     '(10 100 1000))

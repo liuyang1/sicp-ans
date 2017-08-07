@@ -1,3 +1,4 @@
+#lang racket
 (define (max2 a b)
   (if (> a b) a b))
 

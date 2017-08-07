@@ -26,6 +26,8 @@ I had run code with `racket -f [filename]`. This option `-f` forbid default outp
 
 However, find it is useless when run with `racket [filename]`. Still keep it for some old code.
 
+> 20170806, Oops, find this truth AGAIN.
+
 ### Why you display the answer, it seem not useful?
 
 eh..
