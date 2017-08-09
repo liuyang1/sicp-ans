@@ -1,7 +1,16 @@
 #lang racket
+(define (fold op unit lst)
+  (if (null? lst)
+    unit
+    (op (car lst) (fold op unit (cdr lst)))))
+(define (sum lst)
+  (fold + 0 lst))
+(define (average . lst)
+  (/ (sum lst) (length lst)))
+
 (define (smooth f)
   (define dx 0.1)
-  (lambda (x) (/ (+ (f (- x dx)) (f x) (f (+ x dx))) 3)))
+  (lambda (x) (average (f (- x dx)) (f x) (f (+ x dx)))))
 
 (define (compose f g) (lambda (x) (f (g x))))
 
