@@ -1,11 +1,15 @@
 #lang racket
-(define (subsets s)
-  (if (null? s)
-    (list '())
-    (let ((rest (subsets (cdr s))))
-     (append (map (lambda (x) (cons (car s) x)) rest) rest))))
+(define (subsets xs)
+  (displayln xs)
+  (if (null? xs)
+    '(())
+    (let ((x (car xs))
+          (rest (subsets (cdr xs))))
+     (append (map (lambda (a) (cons x a))
+                  rest)
+             rest))))
 
 (define a '(1 2 3))
 
-(displayln a)
-(displayln (subsets a))
+a
+(subsets a)

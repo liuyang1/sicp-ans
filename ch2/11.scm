@@ -7,13 +7,10 @@
 (define *lst* (list *pos* *neg* *zer*))
 
 (define (test-case x y)
-  (display x)
-  (display "\t")
-  (display y)
-  (display "\t")
-  (let ((rt (eq-interval? (mul-interval-trival x y)
-                          (mul-interval x y))))
-    (displayln rt)
+  (letrec ((v0 (mul-interval-trival x y))
+           (v1 (mul-interval x y))
+           (rt (eq-interval? v0 v1)))
+    (display (format "~a * ~a = ~a ?= ~a ~a~n" x y v0 v1 rt))
     rt))
 
 (define (combine ls0 ls1)
@@ -27,12 +24,19 @@
     (append (hl (car ls0) ls1)
             (combine (cdr ls0) ls1))))
 
+(define (combine1 xs ys)
+  (foldr append '()
+         (map (lambda (x)
+                (map (lambda (y) (cons x y)) ys))
+              xs)))
+
 ; AND is a macro instead of a procdurce. so cannot write like this style
 ; (apply and '(#t #t #f))
 ; This is for short-eval, to avoid eval all arguments
 ; use ANDMAP instead
 (define (test-all ls)
-  (andmap identity (map (lambda (x) (test-case (car x) (cdr x))) ls)))
+  (andmap identity (map (lambda (x) (test-case (car x) (cdr x)))
+                        ls)))
 
 (test-all (combine *lst* *lst*))
 

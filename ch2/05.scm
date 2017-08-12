@@ -8,20 +8,21 @@
         (else (* a (pow a (- b 1))))))
 
 ; find X have factor F times
-(define (fact-time x f)
+(define (fact-times x f)
   (define (help x acc)
-  (if (= (remainder x f) 0)
-    (help (/ x f) (+ acc 1))
-    acc))
+    (if (= (remainder x f) 0)
+      (help (/ x f) (+ acc 1))
+      acc))
   (help x 0))
 
 (define (mycons a b) (* (pow 2 a)
                         (pow 3 b)))
 (define (mycar x)
-  (fact-time x 2))
+  (fact-times x 2))
 (define (mycdr x)
-  (fact-time x 3))
+  (fact-times x 3))
 
 (define *v* (mycons 5 7))
+*v*
 (mycar *v*)
 (mycdr *v*)

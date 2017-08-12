@@ -15,4 +15,6 @@
 
 (define *x* (make-center-percent 4 0.05))
 *x*
+(center *x*)
+(width *x*)
 (precent *x*)

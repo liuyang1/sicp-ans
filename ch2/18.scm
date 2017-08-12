@@ -10,7 +10,8 @@
 (define (myreverse-rec lst)
   (if (null? lst)
     '()
-    (append (myreverse-rec (cdr lst)) (list (car lst)))))
+    (append (myreverse-rec (cdr lst))
+            (list (car lst)))))
 
 (define (test-case fn)
   (displayln (fn '()))

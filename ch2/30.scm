@@ -10,7 +10,7 @@
         (else (map square-tree x))))
 
 (define (square x) (* x x))
-(define lst (list 1 (list 2 (list 3 4) 5)))
-(displayln lst)
-(displayln (square-tree-direct lst))
-(displayln (square-tree lst))
+(define lst (list 1 (list 2 (list 3 4 (list 6)) 5)))
+lst
+(square-tree-direct lst)
+(square-tree lst)

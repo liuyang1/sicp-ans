@@ -10,4 +10,4 @@
               0
               coeff))
 
-(displayln (horner 2 (list 1 3 0 5 0 1)))
+(horner 2 (list 1 3 0 5 0 1))

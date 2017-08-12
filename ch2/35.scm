@@ -10,5 +10,5 @@
                     tree)))
 
 (define *test-tree* (list 1 (list 3 2 4)))
-(displayln (count-leaves *test-tree*))
-(displayln (count-leaves (list (list 1 (list 2 3) 4) 5)))
+(count-leaves *test-tree*)
+(count-leaves (list (list 1 (list 2 3) 4) 5))
