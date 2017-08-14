@@ -61,5 +61,20 @@
 ; 这个算法速度非常快啊,令人惊讶.其实并不快的.
 ; 这个算法,因为会枚举各种情况,因此需要的内存容量也比较大.
 ; 对于规模为13的问题,可能就需要几百M内存了.(使用guile)
-(define (test-case)
-  (map displayln (queens 8)))
+(define (test-case n)
+  (let ((r (queens n)))
+   (map displayln r)
+   (displayln (show-board (car r)))
+   #t))
+
+(define (repeat c n)
+  (if (= n 0)
+    '()
+    (cons c (repeat c (- n 1)))))
+
+(define (show-board board)
+  (accumulate-rec string-append ""
+                  (map (lambda (x) (format "~a*~n" (list->string (repeat #\  (- x 1)))))
+                       board)))
+
+(test-case 8)

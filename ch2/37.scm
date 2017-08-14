@@ -20,9 +20,9 @@
 
 (define (matrix-*-matrix m n)
   (let ((cols (transpose n)))
-   (map (lambda (x) 
-          (map (lambda (y)(dot-product x y)) 
-               cols)) 
+   (map (lambda (x)
+          (map (lambda (y) (dot-product x y))
+               cols))
         m)))
 
 (define *test-vector0* (list 1 2 3))
@@ -31,9 +31,9 @@
 
 (define *test-matrix* (list (list 1 2) (list 1 0)))
 (define *test-vector* (list 1 2))
-(displayln (matrix-*-vector *test-matrix* *test-vector*))
+(matrix-*-vector *test-matrix* *test-vector*)
 
-(displayln *test-matrix*)
-(displayln (transpose *test-matrix*))
+*test-matrix*
+(transpose *test-matrix*)
 
-(displayln (matrix-*-matrix *test-matrix* *test-matrix*))
+(matrix-*-matrix *test-matrix* *test-matrix*)

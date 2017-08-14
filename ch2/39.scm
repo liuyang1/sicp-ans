@@ -1,8 +1,8 @@
 #lang racket
-(define (accumulate op initial sequence)
-  (if (null? sequence) initial
+(define (accumulate op init sequence)
+  (if (null? sequence) init
     (op (car sequence)
-        (accumulate op initial (cdr sequence)))))
+        (accumulate op init (cdr sequence)))))
 
 (define (my-fold-left op init seq)
   (define (iter result rest)
@@ -19,5 +19,5 @@
   (my-fold-left (lambda (x y) (cons y x)) '() seq))
 
 (define *test-obj* (list 1 2 3))
-(displayln (reverse1 *test-obj*))
-(displayln (reverse0 *test-obj*))
+(reverse1 *test-obj*)
+(reverse0 *test-obj*)
