@@ -6,6 +6,16 @@
      (cons (/ n g) (/ d g)))))
 (define (numer x) (car x))
 (define (denom x) (cdr x))
+
+; Use exer 2.04 solution
+; (define (make-rat n d)
+;   (if (or (and (< n 0) (< d 0)) (and (> n 0) (< d 0)))
+;     (make-rat (- n) (- d))
+;     (let ((g (gcd n d)))
+;      (lambda (z) (z (/ n g) (/ d g))))))
+; (define (numer z) (z (lambda (a b) a)))
+; (define (denom z) (z (lambda (a b) b)))
+
 (define (print x)
   (display (numer x))
   (display "/")

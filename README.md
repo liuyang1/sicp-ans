@@ -22,11 +22,12 @@ So simply
 
     (define (displayln x) (display x) (newline)).
 
-I had run code with `racket -f [filename]`. This option `-f` forbid default output, so I use `displayln`.
+Intially, I had run code with `racket -f [filename]`. This option `-f` forbid default output, so I use `displayln`.
 
 However, find it is useless when run with `racket [filename]`. Still keep it for some old code.
 
 > 20170806, Oops, find this truth AGAIN.
+> I will clean them all.
 
 ### Why you display the answer, it seem not useful?
 

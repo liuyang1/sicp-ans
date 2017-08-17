@@ -15,7 +15,7 @@
 
 (my-fold-right / 1 (list 1 2 3))
 ;;; (/ 1 (/ 2 (/ 3 1)))
-(my-fold-left / 1 (list 1 2 3)))
+(my-fold-left / 1 (list 1 2 3))
 ;;; (/ (/ (/ 1 1) 2) 3)
 (my-fold-right list '() (list 1 2 3))
 ;;; (list (1 (list 2 (list 3 '()))))
