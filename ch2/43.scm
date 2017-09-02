@@ -1,5 +1,6 @@
 #lang racket
 
+(require "base.scm")
 (require "42.scm")
 
 (define (queens-ex board-size)

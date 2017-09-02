@@ -1,15 +1,6 @@
 #lang racket
-(define (flatmap proc seq)
-  (accumulate append '() (map proc seq)))
 
-(define (enumerate-interval low high)
-  (if (> low high) '()
-    (cons low (enumerate-interval (+ low 1) high))))
-
-(define (accumulate op initial sequence)
-  (if (null? sequence) initial
-    (op (car sequence)
-        (accumulate op initial (cdr sequence)))))
+(require "base.scm")
 
 (define (unique-3-pairs n)
   (flatmap (lambda (i)

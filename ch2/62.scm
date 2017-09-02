@@ -1,3 +1,4 @@
+#lang racket
 (define (element-of-set? x set)
   (cond ((null? set) false)
         ((= x (car set)) true)
@@ -15,3 +16,6 @@
           (cons (car set1) (union-set set0 (cdr set1))))))
 
 (displayln (union-set '(1 3) '(2 3 6)))
+(displayln (union-set '(1 3) '()))
+(displayln (union-set '() '(1 3)))
+(displayln (union-set '() '()))

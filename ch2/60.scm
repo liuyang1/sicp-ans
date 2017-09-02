@@ -1,3 +1,6 @@
+#lang racket
+
+; set: based on unsorted list which accept duplicate element
 (define (element-of-set? x set)
   (cond ((null? set) #f)
         ((equal? x (car set)) #t)
@@ -16,7 +19,7 @@
 (define (union-set set0 set1)
   (append set0 set1))
 
-(displayln (union-set '(1 3 5) '(2 4 6 3)))
-(displayln (intersection-set '(1 3 5) '(2 4 6 3)))
-(displayln (intersection-set '(1 3 5) '(2 3 3)))
-(displayln (intersection-set '(2 3 3) '(1 3 5) ))
+(displayln (union-set '(1 3 3) '(2 4 6 3)))
+(displayln (intersection-set '(1 3 3) '(2 4 6 3)))
+(displayln (intersection-set '(1 3 3) '(2 3 3)))
+(displayln (intersection-set '(2 3 3) '(1 3 3)))

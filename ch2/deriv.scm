@@ -21,6 +21,18 @@
     (snd-operand s)
     (cons (symbol s) (cddr s))))
 
+(define (equal-expr? a b)
+  (cond ((and (list? a) (list? b))
+         (cond ((and (null? a) (null? b)) #t)
+               ((and (not (null? a)) (not (null? b))
+                     (and (equal-expr? (car a) (car b))
+                          (equal-expr? (cdr a) (cdr b)))))
+               (else #f)))
+        ((and (number? a) (number? b)) (= a b))
+        ((and (variable? a) (variable? b)) (same-variable? a b))
+        (else #f)))
+
+;;; TODO: how to simplify it?
 ; add
 (define add-symbol '+)
 (define (make-sum a1 . a2)
@@ -28,6 +40,7 @@
     (cond ((=number? a1 0) a2)
           ((=number? a2 0) a1)
           ((and (number? a1) (number? a2)) (+ a1 a2))
+          ((equal-expr? a1 a2) (make-product 2 a1))
           (else (build-expr add-symbol a1 a2))))
   (if (null? (cdr a2))
     (helper a1 (car a2))
@@ -110,10 +123,9 @@
         (else (error "unknown expression type --DERIV" expr))))
 
 (define (unit-test sample expect)
-  (displayln sample)
   (let ((ret (deriv sample 'x)))
-   (display ret)
-   (display "\tshould be\t")
-   (displayln expect)
-   ; (= ret expect)
-   ))
+   (display (format "deriv(~a) = ~a should be ~a~n" sample ret expect))))
+
+; (make-sum 'x 'x)
+; (make-sum '(+ x y) '(+ x y))
+; (make-sum '(* x y) '(* x y))

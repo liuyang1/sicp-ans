@@ -1,5 +1,7 @@
 #lang racket
 
+; my-equal? :: Num | Symbol | List a => a -> a -> Bool
+; dynamic is fragile
 (define (my-equal? a b)
   (cond ((and (list? a) (list? b))
          (cond ((and (null? a) (null? b)) #t)

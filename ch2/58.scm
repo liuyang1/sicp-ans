@@ -76,11 +76,8 @@
         (else (error "unknown expression type --DERIV" expr))))
 
 (define (unit-test sample expect)
-  (displayln sample)
   (let ((ret (deriv sample 'x)))
-   (display ret)
-   (display "\tshould be\t")
-   (displayln expect)))
+   (display (format "deriv(~a) = ~a should be ~a~n" sample ret expect))))
 
 (unit-test '(x + y) 1)
 (unit-test '((x * y) * (x + 3)) '(((2 * x) + 3) * y))

@@ -1,25 +1,10 @@
 #lang racket
 
 (provide (all-defined-out))
-(define (flatmap proc seq)
-  (accumulate append '() (map proc seq)))
 
-(define (range low high)
-  (if (> low high) '()
-    (cons low (range (+ low 1) high))))
+(require "base.scm")
 
-(define (accumulate-iter op init seq)
-  (define (helper seq ret)
-    (if (null? seq) ret
-      (helper (cdr seq) (op (car seq) ret))))
-  (helper seq init))
-
-(define (accumulate-rec op initial sequence)
-  (if (null? sequence) initial
-    (op (car sequence)
-        (accumulate-rec op initial (cdr sequence)))))
-
-(define accumulate accumulate-iter)
+(define range enumerate-interval)
 
 ; 判断k行,是否和后面已经排列好的,存在相同的行
 (define (same-cols? k positions)
