@@ -3,28 +3,34 @@
 (require "63.scm")
 (require "64.scm")
 
-; TODO:
-(define (union set0 set1)
-  (define (make-leaf entry) (make-tree entry '() '()))
-  (cond ((null? set0) set1)
-        ((null? set1) set0)
+(define tree->list tree->list-2)
+
+(define (merge xs ys)
+  (cond ((null? xs) ys)
+        ((null? ys) xs)
         (else
-          (let ((entry0 (entry set0))
-                (entry1 (entry set1))
-                (left0 (left-branch set0))
-                (left1 (left-branch set1))
-                (right0 (right-branch set0))
-                (right1 (right-branch set1)))
-            (cond ((= entry0 entry1)
-                   (make-tree entry0
-                              (union left0 left1)
-                              (union right0 right1)))
-                  ((< entry0 entry1)
-                   (make-tree entry0
-                              (union left0 left1)
-                              (union (union right0 (make-leaf entry1))
-                                     right1)))
-                  (else (union set1 set0)))))))
+          (let ((x (car xs))
+                (y (car ys))
+                (xt (cdr xs))
+                (yt (cdr ys)))
+            (cond ((= x y) (cons x (merge xt yt)))
+                  ((< x y) (cons x (merge xt ys)))
+                  (else (cons y (merge xs yt))))))))
+
+; (define (union set0 set1)
+;   (list->tree (merge (tree->list set0)
+;                      (tree->list set1))))
+
+(define (on f g)
+  (lambda (x y) (f (g x) (g y))))
+
+(define (.: f g)
+  (lambda (x y) (f (g x y))))
+
+;; Haskell style :)
+;; list->tree .: (merge `on` tree->list)
+(define union
+  (.: list->tree (on merge tree->list)))
 
 
 (define *obj0* (list->tree '(1 3 5 7 9 11)))
