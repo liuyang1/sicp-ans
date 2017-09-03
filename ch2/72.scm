@@ -1,3 +1,4 @@
+#lang racket
 ; using WEIGHT as weight, tree height as value.
 
 ; for example
@@ -11,18 +12,16 @@
       (* 1 4)
       (* 1 4))
    8))
-(display *avg-height*)
-(newline)
+(displayln *avg-height*)
 
 ; check every node if encoded symbol is in the symbol-list or not
-(define *avg-height*
+(define *avg-height-1*
   (/ (+ (* 4 2)
         (* 2 4)
         (* 1 6)
         (* 1 7))
      8))
-(display *avg-height*)
-(newline)
+(displayln *avg-height-1*)
 
 ; for 2.71 condition
 

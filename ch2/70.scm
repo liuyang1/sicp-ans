@@ -1,3 +1,4 @@
+#lang racket
 (define (make-leaf symbol weight) (list 'leaf symbol weight))
 (define (leaf? obj) (eq? (car obj) 'leaf))
 (define (symbol-leaf obj) (cadr obj))
@@ -6,7 +7,7 @@
 ; Huffmann tree struct
 ; (left-child right-child symbols-of-all-node weight-of-all-node)
 (define (make-code-tree left right)
-  (list left 
+  (list left
         right
         (append (symbols left) (symbols right))
         (+ (weight left) (weight right))))
@@ -50,12 +51,10 @@
 
 (define *pairs* '((a 2) (na 16) (boom 1) (sha 3)
                         (get 2) (yip 9) (job 2) (wah 1)))
-(display *pairs*)
-(newline)
+(displayln *pairs*)
 
 (define *tree* (generate-huffmann-tree *pairs*))
-(display *tree*)
-(newline)
+(displayln *tree*)
 
 ; encode message by tree
 (define (encode message tree)
@@ -84,12 +83,8 @@
                     sha na na na na na na na na
                     wah yip yip yip yip yip yip yip yip yip
                     sha boom))
-(display *msg*)
-(newline)
-(display (length *msg*))
-(newline)
+(displayln *msg*)
+(displayln (length *msg*))
 (define *encode-msg* (encode *msg* *tree*))
-(display *encode-msg*)
-(newline)
-(display (length *encode-msg*))
-(newline)
+(displayln *encode-msg*)
+(displayln (length *encode-msg*))

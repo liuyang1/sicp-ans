@@ -1,3 +1,4 @@
+#lang racket
 ; leaf struct
 ; ('leaf SYMBOL WEIGHT)
 (define (make-leaf symbol weight) (list 'leaf symbol weight))
@@ -6,15 +7,18 @@
 (define (weight-leaf obj) (caddr obj))
 
 ; Huffmann tree struct
+; data HT = HT (HT left) (HT right) [symbol] weight
+;         | Leaf symbol weight
 ; (left-child right-child symbols-of-all-node weight-of-all-node)
 (define (make-code-tree left right)
-  (list left 
+  (list left
         right
         (append (symbols left) (symbols right))
         (+ (weight left) (weight right))))
 
 (define (left-branch tree) (car tree))
 (define (right-branch tree) (cadr tree))
+; symbols :: HT -> [symbol]
 (define (symbols tree)
   (if (leaf? tree)
     (list (symbol-leaf tree))
@@ -26,13 +30,15 @@
 
 (define (decode bits tree)
   (define (decode-1 bits current-branch)
-    (if (null? bits) '()
-      (let ((next-branch (choose-branch (car bits) current-branch)))
+    (if (null? bits)
+      '()
+      (let ((next-branch (choose-branch (car bits) current-branch))
+            (next-bits (cdr bits)))
        (if (leaf? next-branch)
          ; if leaf? recur call to cons answer
          (cons (symbol-leaf next-branch)
-               (decode-1 (cdr bits) tree))
-         (decode-1 (cdr bits) next-branch)))))
+               (decode-1 next-bits tree))
+         (decode-1 next-bits next-branch)))))
   (decode-1 bits tree))
 ; simplily return left or right branch
 (define (choose-branch bit branch)
@@ -46,10 +52,8 @@
                                   (make-code-tree (make-leaf 'D 1)
                                                   (make-leaf 'C 1)))))
 
-(display *sample-tree*)
-(newline)
+(displayln *sample-tree*)
 
 (define *sample-message* '(0 1 1 0 0 1 0 1 0 1 1 1 0))
 
-(display (decode *sample-message* *sample-tree*))
-(newline)
+(displayln (decode *sample-message* *sample-tree*))
