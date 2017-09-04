@@ -17,6 +17,17 @@
                   ((< x y) (cons x (merge xt ys)))
                   (else (cons y (merge xs yt))))))))
 
+(define (intersect xs ys)
+  (cond ((or (null? xs) (null? ys)) '())
+        (else
+          (let ((x (car xs))
+                (y (car ys))
+                (xt (cdr xs))
+                (yt (cdr ys)))
+            (cond ((= x y) (cons x (intersect xt yt)))
+                  ((< x y) (intersect xt ys))
+                  (else (intersect xs yt)))))))
+
 ; (define (union set0 set1)
 ;   (list->tree (merge (tree->list set0)
 ;                      (tree->list set1))))
@@ -27,10 +38,13 @@
 (define (.: f g)
   (lambda (x y) (f (g x y))))
 
+(define (lift f)
+  (.: list->tree (on f tree->list)))
+
 ;; Haskell style :)
 ;; list->tree .: (merge `on` tree->list)
-(define union
-  (.: list->tree (on merge tree->list)))
+(define union (lift merge))
+(define intersection (lift intersect))
 
 
 (define *obj0* (list->tree '(1 3 5 7 9 11)))
@@ -40,3 +54,4 @@
 (disp (union *obj0* *obj1*))
 
 (disp (union '(7 () ()) '(9 (7 () ()) (11 () ()))))
+(disp (intersection '(7 () ()) '(9 (7 () ()) (11 () ()))))
